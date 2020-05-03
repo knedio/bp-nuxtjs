@@ -4,38 +4,36 @@
             class="container"
             @submit.prevent=""
         >
+            <div class="text-center mb-2" v-if="error">
+                <span class="text-red-500 bold ">
+                    {{ error }}
+                </span>
+            </div>
             <div>
                 <InputField
                     class="m-2"
                     label="Email Address"
-                    id="emailAddress"
+                    id="email"
                     type="email"
-                    :errors="[]"
-                    v-model="loginForm.emailAddress"
+                    :errors="errorMessages.email"
+                    v-model="loginForm.email"
                 />
                 <InputField
                     class="m-2"
                     label="Password"
                     id="password"
                     type="password"
-                    :errors="[]"
+                    :errors="errorMessages.password"
                     v-model="loginForm.password"
                 />
             </div>
             <div class="flex justify-between">
                 <button type="submit"
-                    class="ml-auto text-sm aos-text-gray font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-none"
+                    class="ml-auto text-sm font-bold  py-2 px-4 rounded focus:outline-none focus:shadow-none"
                     :disabled="submitting"
                     @click="onSubmit()"
                 >
-                    <b-spinner 
-                        v-if="submitting"
-                        small
-                        variant="primary">
-                    </b-spinner>
-                    <span v-else>
-                        Sign in
-                    </span>
+                    Sign in
                 </button>
             </div>
         </form>
@@ -60,8 +58,10 @@
 		data() {
 			return {
 				submitting: false,
+                error: '',
+                errorMessages: [],
 				loginForm: {
-					emailAddress: '',
+					email: '',
                     password: '',
 				}
 			}
@@ -72,7 +72,26 @@
 		methods: {
             onSubmit()
             {
-                
+                this.submitting = true;
+                // this.$valida
+                this.$auth.loginWith('local', {
+                    data: {
+                        email: this.loginForm.email,
+                        password: this.loginForm.password
+                    }
+                }).then( (response) => {
+                    this.submitting = false;
+                    this.$router.push('/dashboard')
+                }).catch( (err) => {
+                    this.submitting = false;
+                    if(err?.response?.status == 422) {
+                        const { status, data } = err.response;
+                        this.errorMessages = [];
+                        this.errorMessages = data.errors;
+                    } else {
+                        this.error = 'Sorry! The email or password is incorrect.'
+                    }
+                })
             }
 		}
 	}

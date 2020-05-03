@@ -46,7 +46,7 @@
 	import LoginForm from '~/components/Modules/Login/LoginForm';
 
 	export default {
-		// middleware: ['auth-logged'],
+		middleware: ['auth-global'],
 		components: {
 			LoginForm,
 		},
