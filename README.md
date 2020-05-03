@@ -1,5 +1,5 @@
 <p>
-    Calendar Web
+    Standard
 </p>
 <p>
     This project is using a NuxtJS framework for this project.

@@ -1,7 +1,7 @@
 {
-  "name": "Calendar",
+  "name": "standard",
   "version": "1.0.0",
-  "description": "This app is an calendar app",
+  "description": "This app is an standard app",
   "author": "Karl Naio Edio",
   "private": true,
   "scripts": {
